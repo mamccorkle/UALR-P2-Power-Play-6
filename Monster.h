@@ -12,6 +12,12 @@
     public:
         Monster() = default;
         Monster( const Object& );   // Conversion Constructor
+
+        int attack( ) const;
+        void defend( int );
+        void battlePrint() const;
+        bool isDead() const;
+
     protected:
     private:
         int AC{  };

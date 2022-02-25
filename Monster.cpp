@@ -1,16 +1,17 @@
 //
 // Created by Mark McCorkle on 2/25/22.
 //
+#include <iostream>     // Header files should be dependency-inclusive
 #include "Monster.h"
 #include "Player.h"
 
-Monster::Monster( const Object& player )
+Monster::Monster( const Object& player ): Object()
 {
-    std::normal_distribution<double> monsterLevel((float)player.level, player.level  / 4.0);
-    int level{ std::max(1, (int)monsterLevel(engine)) };
+    std::normal_distribution<double> monsterLevel((float)player.getLevel(), player.getLevel()  / 4.0);
+    level = std::max(1, (int)monsterLevel(engine));
 
     std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes  - 1);
-    Object::Type name{ (Object::Type)monsterType(engine) };
+    name = (Object::Type)monsterType(engine);
 
     double strengthVariance{ 0.0 };
     double healthVariance{ 0.0 };
@@ -36,12 +37,42 @@ Monster::Monster( const Object& player )
     std::normal_distribution<double> randomStrength(strengthVariance, level  / 4.0);
     std::normal_distribution<double> randomHealth(healthVariance  * 5, level  / 2.0);
 
-    Object monster(
-            {
-                    name,
-                    std::max(1, (int)randomStrength(engine)),
-                    std::max(1, (int)randomHealth(engine)),
-                    level,
-                    {}
-            });
+    strength = std::max(1, (int)randomStrength(engine));
+    health = std::max(1, (int)randomHealth(engine));
+
+}
+
+int Monster::attack( ) const
+{
+    std::bernoulli_distribution willAttack(.75);
+    if (willAttack(engine))
+    {
+        printName();
+        std::cout  << " attacks!" << std::endl;
+        int potentialDamage{ strength };
+        std::normal_distribution<double> damageDealt( potentialDamage, 2.0 );
+        return std::max( 1, static_cast<int>( damageDealt( engine )) );
+    }
+    else
+    {
+        printName();
+        std::cout  << " twiddles its thumbs" << std::endl;
+        return 0;
+    }
+}
+
+void Monster::defend(int)
+{
+
+}
+
+void Monster::battlePrint() const
+{
+    printName();
+    std::cout  << " h:" << health  << std::endl;
+}
+
+bool Monster::isDead() const
+{
+    return health <= 0;
 }

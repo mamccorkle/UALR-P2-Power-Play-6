@@ -8,9 +8,16 @@
     {
     public:
         enum class Type { sword, armor, shield, numTypes };
+
+        // Constructors:
+        Item( Type, int );    // Conversion Constructor
+
+        void print() const; // Will need to change to use the operator overload
+        Item::Type getClassification() const;
+        int getBonusValue() const;
     protected:
     private:
-        Type clasification{  };
+        Type classification{  };
         int bonusValue{  };
     };
 

@@ -31,41 +31,33 @@
 //#include <random>
 #include <algorithm>
 #include "Item.h"
-#include "Object.h"
+#include "Monster.h"
+#include "Player.h"
 
 // TODO: Clean header file names (ifndef)
 
-std::vector<Object> createMonsters(const Object& player);
-void monsterAttack(Object& player, const std::vector<Object>& monsters);
-void bringOutYourDead(std::vector<Object>& monsters);
+std::vector<Monster> createMonsters(const Player& player);
+void bringOutYourDead(std::vector<Monster>& monsters);
 
-void playerAttack(const Object& player, std::vector<Object>& monsters);
-void levelUp(Object& player);
-int calculateAC(const Object& object);
-void heal(Object& object);
+void monsterAttack(Player& player, const std::vector<Monster>& monsters);
+void playerAttack(const Player& player, std::vector<Monster>& monsters);
 
-void displayBattle(const Object& player, const std::vector<Object>& monsters);
-
-void printName(const Object& object);
-void printItem(const Item& item);
-int attack(const Object& object);
-void defend(Object& object, int damage);
+void displayBattle(const Player& player, const std::vector<Monster>& monsters);
 
 int main()
 {
-    Object player{ Object::Type::player, 0,1,0, {} };
-    std::vector<Object> monsters;
+    Player player;
+    std::vector<Monster> monsters;
 
-    while (player.health  > 0)
+    while( !player.isDead() )
     {
-        levelUp(player);
         monsters  = createMonsters(player);
 
         std::cout  << monsters.size() << " monster(s) approaches!!" << std::endl;
         system("pause");
         system("cls");
 
-        while (player.health  > 0 && monsters.size() > 0)
+        while( !player.isDead()  > 0 && monsters.size() > 0 )
         {
 
             displayBattle(player, monsters);
@@ -81,7 +73,7 @@ int main()
                     break;
                 }
                 case 'h' :
-                    heal(player);
+                    player.heal();
                     break;
                 default:
                     std::cout  << "please enter a or h" << std::endl;
@@ -97,15 +89,15 @@ int main()
         }
     }
 
-    if (player.health  <= 0)
+    if( player.isDead() )
     {
         std::cout  << "You Have Died" << std::endl;
     }
-    if (player.health  <= 0 && monsters.size() == 0)
+    if( player.isDead() && monsters.size() == 0 )
     {
         std::cout  << "BUT" << std::endl;
     }
-    if (monsters.size() == 0)
+    if( monsters.size() == 0 )
     {
         std::cout  << "You have killed the monsters!!!" << std::endl;
     }
@@ -113,201 +105,63 @@ int main()
     system("PAUSE");
 }
 
-void displayBattle(const Object& player, const std::vector<Object>& monsters)
+void displayBattle(const Player& player, const std::vector<Monster>& monsters)
 {
-    printName(player);
-    std::cout  << " h:" << player.health  << std::endl;
-    std::for_each(player.inventory.begin(), player.inventory.end(), [](std::pair<Item::Type, Item> item)
-    {
-        std::cout  << "  ";
-        printItem(item.second);
-        std::cout  << std::endl;
-    });
+    player.battlePrint();
     std::cout  << std::endl  << "  Monsters: " << std::endl;
     {
         int i{ 1 };
-        std::for_each(monsters.begin(), monsters.end(), [&](const Object& monster)
+        std::for_each(monsters.begin(), monsters.end(), [&](const Monster& monster)
         {
             std::cout  << "   " << i  << ". ";
-            printName(monster);
-            std::cout  << " h:" << monster.health  << std::endl;
+            monster.battlePrint();
             i++;
         });
     }
 }
 
-std::vector<Object> createMonsters(const Object& player)
+std::vector<Monster> createMonsters(const Player& player)
 {
-    std::normal_distribution<double> randomNumMonsters((double)player.level, player.level  / 2.0);
-    std::vector<Object> monsters(std::max(1, (int)randomNumMonsters(engine)));
+    std::normal_distribution<double> randomNumMonsters((double)player.getLevel(), player.getLevel()  / 2.0);
+    std::vector<Monster> monsters(std::max(1, (int)randomNumMonsters(Object::engine)));
     std::generate(monsters.begin(), monsters.end(), [&]()
     {
-        //set level based on player level
-
-        return monster;
+        // Call the Monster class default constructor:
+        return Monster();
     });
     return monsters;
 }
 
-void monsterAttack(Object& player, const std::vector<Object>& monsters)
+void monsterAttack(Player& player, const std::vector<Monster>& monsters)
 {
     std::cout  << std::endl;
-    std::for_each(monsters.begin(), monsters.end(), [&](const Object& monster)
+    std::for_each(monsters.begin(), monsters.end(), [&](const Monster& monster)
     {
-        std::bernoulli_distribution willAttack(.75);
-        if (willAttack(engine))
-        {
-            printName(monster);
-            std::cout  << " attacks!" << std::endl;
-            defend(player, attack(monster));
-        }
-        else
-        {
-            printName(monster);
-            std::cout  << " twiddles its thumbs" << std::endl;
-        }
+        player.defend( monster.attack() );
     });
 }
 
-void playerAttack(const Object& player, std::vector<Object>& monsters)
+void playerAttack(const Player& player, std::vector<Monster>& monsters)
 {
     std::cout  << "Which Monster: ";
     int monsterNum{ 0 };
     std::cin  >> monsterNum;
     if (monsterNum  > 0 && monsterNum  <= monsters.size())
     {
-        defend(monsters[monsterNum  - 1], attack(player));
+        //defend(monsters[monsterNum  - 1], attack(player));
+        monsters[monsterNum  - 1].defend(player.attack());
     }
 }
 
-void levelUp(Object& player)
-{
-    player.level++;
-    std::normal_distribution<double> randomHealth(20.0 + player.level  * 5, 5.0);
-    player.health  += std::max(1, (int)randomHealth(engine));
-
-    std::normal_distribution<double> randomStrength(3.0 + player.level, 1.0);
-    player.strength  += std::max(1, (int)randomStrength(engine));
-
-    //grab new item.
-    std::uniform_int_distribution<int> randomItem(0, (int)Item::Type::numTypes  - 1);
-    std::normal_distribution<double> randomBonus((double)player.level, (double)player.level  / 2);
-    Item found{ (Item::Type)randomItem(engine), std::max(1, (int)randomBonus(engine)) };
-
-    std::cout  << "You found a ";
-    printItem(found);
-    std::cout  << "!!!!" << std::endl;
-    if (
-        auto haveOne{ player.inventory.find(found.clasification) };
-            haveOne  == player.inventory.end()
-            || player.inventory[found.clasification].bonusValue  < found.bonusValue
-            )
-    {
-        std::cout  << "You keep the shiny new toy!" << std::endl;
-        player.inventory[found.clasification] = found;
-    }
-    else
-    {
-        std::cout  << "You toss aside the ugly old thing!" << std::endl;
-    }
-}
-
-int calculateAC(const Object& object)
-{
-    int AC{ 0 };
-    if (auto armor{ object.inventory.find(Item::Type::armor) }; armor  != object.inventory.end())
-    {
-        AC  += armor->second.bonusValue;
-    }
-    if (auto shield{ object.inventory.find(Item::Type::shield) }; shield  != object.inventory.end())
-    {
-        AC  += shield->second.bonusValue;
-    }
-    return AC;
-}
-
-void printName(const Object& object)
-{
-    std::cout  << "L:" << object.level  << " ";
-    switch (object.name)
-    {
-        case Object::Type::player:
-            std::cout  << "Player";
-            break;
-        case Object::Type::slime:
-            std::cout  << "Slime";
-            break;
-        case Object::Type::orc:
-            std::cout  << "Orc";
-            break;
-        case Object::Type::sprite:
-            std::cout  << "Sprite";
-            break;
-        case Object::Type::dragon:
-            std::cout  << "Dragon";
-            break;
-    }
-}
-
-void printItem(const Item& item)
-{
-    switch (item.clasification)
-    {
-        case Item::Type::armor:
-            std::cout  << "Armor";
-            break;
-        case Item::Type::shield:
-            std::cout  << "Shield";
-            break;
-        case Item::Type::sword:
-            std::cout  << "Sword";
-            break;
-    }
-    std::cout  << "+" << item.bonusValue;
-}
-
-int attack(const Object& object)
-{
-    int potentialDamage{ object.strength  };
-    if (auto sword{ object.inventory.find(Item::Type::sword) }; sword  != object.inventory.end())
-    {
-        potentialDamage  += sword->second.bonusValue;
-    }
-    std::normal_distribution<double> damageDealt(potentialDamage, 2.0);
-
-    printName(object);
-    std::cout  << " deals ";
-    return std::max(1, (int)damageDealt(engine));
-}
-
-void defend(Object& object, int damage)
-{
-    std::normal_distribution<double> defense(calculateAC(object), 1.0 / object.level);
-    damage  = std::max(0, damage  - (int)defense(engine));
-    std::cout  << damage  << " damage to ";
-    printName(object);
-    std::cout  << "!!!" << std::endl;
-    object.health  -= damage;
-}
-
-void heal(Object& object)
-{
-    std::normal_distribution<double> randomHeal(object.strength, 3.0);
-    int  amountHealed{ std::max(1, (int)randomHeal(engine)) };
-    printName(object);
-    std::cout  << " is healed by " << amountHealed  << "hp!" << std::endl;
-    object.health  += amountHealed;
-}
-
-void bringOutYourDead(std::vector<Object>& monsters)
+void bringOutYourDead(std::vector<Monster>& monsters)
 {
     monsters.erase(
     std::remove_if(monsters.begin(), monsters.end(),
-                   [](Object& monster)
+                   [](Monster& monster)
                    {
-                       if (monster.health  <= 0)
+                       if( monster.isDead() )
                        {
-                           printName(monster);
+                           monster.printName();
                            std::cout  << " has died!!!" << std::endl  << std::endl;
                            return true;
                        }
