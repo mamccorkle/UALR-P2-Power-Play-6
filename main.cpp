@@ -1,11 +1,36 @@
+//
+//  main.cpp
+//
+//  Project: UALR - Programming 2 - Spring 22 - Power Play 6
+//  Created by: Mark McCorkle on 20220225
+//  Based on: Code Provided by Sean Orme
+//  IDE: CLion 2021.2.3     - VERIFIED WORKING
+//  IDE: XCode              - VERIFIED/UNVERIFIED
+//  IDE: Visual Studio 2022 - VERIFIED/UNVERIFIED
+//  IDE: Linux via g++      - VERIFIED WORKING (g++ -Wall -std=c++17 main.cpp -o main)
+//
+/*  OBJECTIVES:
+
+    I’m going to help you:
+        1)  Create and Object class
+        2)  Create a player and monster class that inherits from object
+            a)  Player gets Spell points and Heal costs 2SP
+            b)  Monster gets an AC based upon its type.
+        3)  create an item class.
+
+    You get to:
+        4)  Create some operator overloads:
+            a)  << for the Object class (same as printObject function)
+            b)  << for the Item class (same as printItem function)
+            c)  < for the Item class (compares bonus values)
+            d)  += for the Item class (adds bonus values and an int and returns an int)
+*/
 #include <iostream>
 #include <string>
 #include <vector>
 #include <random>
 #include <algorithm>
-#include <fstream>
 #include <map>
-
 
 struct Item
 {
@@ -24,8 +49,6 @@ struct Object
     std::map<Item::Type, Item> inventory;
 };
 
-
-
 std::vector<Object> createMonsters(const Object& player);
 void monsterAttack(Object& player, const std::vector<Object>& monsters);
 void bringOutYourDead(std::vector<Object>& monsters);
@@ -42,8 +65,6 @@ void printItem(const Item& item);
 int attack(const Object& object);
 void defend(Object& object, int damage);
 
-
-
 std::random_device seed;
 std::default_random_engine engine(seed());
 
@@ -51,6 +72,7 @@ int main()
 {
     Object player{ Object::Type::player, 0,1,0, {} };
     std::vector<Object> monsters;
+
     while (player.health  > 0)
     {
         levelUp(player);
@@ -104,8 +126,8 @@ int main()
     {
         std::cout  << "You have killed the monsters!!!" << std::endl;
     }
-    system("PAUSE");
 
+    system("PAUSE");
 }
 
 
@@ -185,7 +207,6 @@ std::vector<Object> createMonsters(const Object& player)
 
 void monsterAttack(Object& player, const std::vector<Object>& monsters)
 {
-
     std::cout  << std::endl;
     std::for_each(monsters.begin(), monsters.end(), [&](const Object& monster)
     {
@@ -349,5 +370,4 @@ void bringOutYourDead(std::vector<Object>& monsters)
                                return false;
                            }),
             monsters.end());
-
 }
