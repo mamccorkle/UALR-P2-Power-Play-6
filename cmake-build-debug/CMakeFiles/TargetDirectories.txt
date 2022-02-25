@@ -1,0 +1,3 @@
+/home/decyple/CLionProjects/UALR - P2 - Power Play 6/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/decyple/CLionProjects/UALR - P2 - Power Play 6/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/decyple/CLionProjects/UALR - P2 - Power Play 6/cmake-build-debug/CMakeFiles/UALR___P2___Power_Play_6.dir
