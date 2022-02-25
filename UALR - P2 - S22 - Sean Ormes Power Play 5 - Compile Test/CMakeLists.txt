@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.21)
+project(UALR___P2___S22___Sean_Ormes_Power_Play_5___Compile_Test)
+
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(UALR___P2___S22___Sean_Ormes_Power_Play_5___Compile_Test main.cpp)

@@ -8,10 +8,10 @@
     {
     public:
         enum class Type { sword, armor, shield, numTypes };
-        Type clasification;
-        int bonusValue;
     protected:
     private:
+        Type clasification{  };
+        int bonusValue{  };
     };
 
 #endif //UALR___P2___POWER_PLAY_6_ITEM_H

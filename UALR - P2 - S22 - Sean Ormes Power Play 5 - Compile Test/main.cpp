@@ -1,39 +1,29 @@
-//
-//  main.cpp
-//
-//  Project: UALR - Programming 2 - Spring 22 - Power Play 6
-//  Created by: Mark McCorkle on 20220225
-//  Based on: Code Provided by Sean Orme
-//  IDE: CLion 2021.2.3     - VERIFIED WORKING
-//  IDE: XCode              - VERIFIED/UNVERIFIED
-//  IDE: Visual Studio 2022 - VERIFIED/UNVERIFIED
-//  IDE: Linux via g++      - VERIFIED WORKING (g++ -Wall -std=c++17 main.cpp -o main)
-//
-/*  OBJECTIVES:
-
-    I’m going to help you:
-        1)  Create and Object class                                                         -   Complete
-        2)  Create a player and monster class that inherits from object                     -   Complete
-            a)  Player gets Spell points and Heal costs 2SP                                 -   ........
-            b)  Monster gets an AC based upon its type.                                     -   ........
-        3)  create an item class.                                                           -   Complete
-
-    You get to:
-        4)  Create some operator overloads:                                                 -   ........
-            a)  << for the Object class (same as printObject function)                      -   ........
-            b)  << for the Item class (same as printItem function)                          -   ........
-            c)  < for the Item class (compares bonus values)                                -   ........
-            d)  += for the Item class (adds bonus values and an int and returns an int)     -   ........
-*/
 #include <iostream>
 #include <string>
 #include <vector>
-//#include <random>
+#include <random>
 #include <algorithm>
-#include "Item.h"
-#include "Object.h"
+#include <map>
 
-// TODO: Clean header file names (ifndef)
+
+struct Item
+{
+    enum class Type { sword, armor, shield, numTypes };
+    Type clasification;
+    int bonusValue;
+};
+
+struct Object
+{
+    enum class Type { player, slime, orc, sprite, dragon, numTypes };
+    Type name;
+    int strength{ 0 };
+    int health{ 0 };
+    int level{ 0 };
+    std::map<Item::Type, Item> inventory;
+};
+
+
 
 std::vector<Object> createMonsters(const Object& player);
 void monsterAttack(Object& player, const std::vector<Object>& monsters);
@@ -51,11 +41,15 @@ void printItem(const Item& item);
 int attack(const Object& object);
 void defend(Object& object, int damage);
 
+
+
+std::random_device seed;
+std::default_random_engine engine(seed());
+
 int main()
 {
     Object player{ Object::Type::player, 0,1,0, {} };
     std::vector<Object> monsters;
-
     while (player.health  > 0)
     {
         levelUp(player);
@@ -109,9 +103,11 @@ int main()
     {
         std::cout  << "You have killed the monsters!!!" << std::endl;
     }
-
     system("PAUSE");
+
 }
+
+
 
 void displayBattle(const Object& player, const std::vector<Object>& monsters)
 {
@@ -143,7 +139,44 @@ std::vector<Object> createMonsters(const Object& player)
     std::generate(monsters.begin(), monsters.end(), [&]()
     {
         //set level based on player level
+        std::normal_distribution<double> monsterLevel((float)player.level, player.level  / 4.0);
+        int level{ std::max(1, (int)monsterLevel(engine)) };
 
+        std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes  - 1);
+        Object::Type name{ (Object::Type)monsterType(engine) };
+
+        double strengthVariance{ 0.0 };
+        double healthVariance{ 0.0 };
+        switch (name)
+        {
+            case Object::Type::slime:
+                strengthVariance  = level  * 1.5;
+                healthVariance  = level  * 1.25;
+                break;
+            case Object::Type::orc:
+                strengthVariance  = level  * 2.0;
+                healthVariance  = (long long)level  * level  * 1.25;
+                break;
+            case Object::Type::sprite:
+                strengthVariance  = level  * 1.75;
+                healthVariance  = level;
+                break;
+            case Object::Type::dragon:
+                strengthVariance  = level  * 6.0;
+                healthVariance  = (long long)level  * level  * 3.0;
+                break;
+        }
+        std::normal_distribution<double> randomStrength(strengthVariance, level  / 4.0);
+        std::normal_distribution<double> randomHealth(healthVariance  * 5, level  / 2.0);
+
+        Object monster(
+                {
+                        name,
+                        std::max(1, (int)randomStrength(engine)),
+                        std::max(1, (int)randomHealth(engine)),
+                        level,
+                        {}
+                });
         return monster;
     });
     return monsters;
@@ -151,6 +184,7 @@ std::vector<Object> createMonsters(const Object& player)
 
 void monsterAttack(Object& player, const std::vector<Object>& monsters)
 {
+
     std::cout  << std::endl;
     std::for_each(monsters.begin(), monsters.end(), [&](const Object& monster)
     {
@@ -302,16 +336,17 @@ void heal(Object& object)
 void bringOutYourDead(std::vector<Object>& monsters)
 {
     monsters.erase(
-    std::remove_if(monsters.begin(), monsters.end(),
-                   [](Object& monster)
-                   {
-                       if (monster.health  <= 0)
-                       {
-                           printName(monster);
-                           std::cout  << " has died!!!" << std::endl  << std::endl;
-                           return true;
-                       }
-                       return false;
-                   }),
-    monsters.end());
+            std::remove_if(monsters.begin(), monsters.end(),
+                           [](Object& monster)
+                           {
+                               if (monster.health  <= 0)
+                               {
+                                   printName(monster);
+                                   std::cout  << " has died!!!" << std::endl  << std::endl;
+                                   return true;
+                               }
+                               return false;
+                           }),
+            monsters.end());
+
 }

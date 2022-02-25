@@ -3,3 +3,10 @@
 //
 #include "Object.h"
 
+static std::random_device seed;
+static std::default_random_engine engine(seed());
+
+Object::Object( Object::Type name, int strength, int health, int level )
+{
+
+}

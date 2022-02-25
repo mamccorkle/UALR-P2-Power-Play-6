@@ -4,13 +4,17 @@
 #ifndef UALR___P2___POWER_PLAY_6_MONSTER_H
 #define UALR___P2___POWER_PLAY_6_MONSTER_H
 
-    #include "Object.h"
+    #include "Object.h" // Parent
 
-    class Monster: Object
+    class Player;   // Forward Declaration
+    class Monster: public Object
     {
     public:
+        Monster() = default;
+        Monster( const Object& );   // Conversion Constructor
     protected:
     private:
+        int AC{  };
     };
 
 #endif //UALR___P2___POWER_PLAY_6_MONSTER_H
