@@ -12,42 +12,27 @@
 /*  OBJECTIVES:
 
     I’m going to help you:
-        1)  Create and Object class
-        2)  Create a player and monster class that inherits from object
-            a)  Player gets Spell points and Heal costs 2SP
-            b)  Monster gets an AC based upon its type.
-        3)  create an item class.
+        1)  Create and Object class                                                         -   Complete
+        2)  Create a player and monster class that inherits from object                     -   Complete
+            a)  Player gets Spell points and Heal costs 2SP                                 -   ........
+            b)  Monster gets an AC based upon its type.                                     -   ........
+        3)  create an item class.                                                           -   Complete
 
     You get to:
-        4)  Create some operator overloads:
-            a)  << for the Object class (same as printObject function)
-            b)  << for the Item class (same as printItem function)
-            c)  < for the Item class (compares bonus values)
-            d)  += for the Item class (adds bonus values and an int and returns an int)
+        4)  Create some operator overloads:                                                 -   ........
+            a)  << for the Object class (same as printObject function)                      -   ........
+            b)  << for the Item class (same as printItem function)                          -   ........
+            c)  < for the Item class (compares bonus values)                                -   ........
+            d)  += for the Item class (adds bonus values and an int and returns an int)     -   ........
 */
 #include <iostream>
 #include <string>
 #include <vector>
 #include <random>
 #include <algorithm>
-#include <map>
+#include "Item.h"
+#include "Object.h"
 
-struct Item
-{
-    enum class Type { sword, armor, shield, numTypes };
-    Type clasification;
-    int bonusValue;
-};
-
-struct Object
-{
-    enum class Type { player, slime, orc, sprite, dragon, numTypes };
-    Type name;
-    int strength{ 0 };
-    int health{ 0 };
-    int level{ 0 };
-    std::map<Item::Type, Item> inventory;
-};
 
 std::vector<Object> createMonsters(const Object& player);
 void monsterAttack(Object& player, const std::vector<Object>& monsters);
