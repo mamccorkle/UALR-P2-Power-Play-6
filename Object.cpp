@@ -8,7 +8,7 @@ std::random_device Object::seed;
 std::default_random_engine Object::engine(seed());
 
 // Object Conversion Constructor Definition:
-Object::Object( Object::Type name, int strength, int health, int level )
+Object::Object( Object::Type name, int strength, int health, int level ): name(name), strength(strength),health(health),level(level)
 { }
 
 int Object::getLevel() const

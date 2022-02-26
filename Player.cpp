@@ -5,9 +5,9 @@
 #include <algorithm>     // Header files should be dependency-inclusive
 #include "Player.h"
 
-Player::Player()
+Player::Player():Object(Object::Type::player,0, 1, 0)
 {
-    level++;
+
 }
 
 void Player::levelUp()

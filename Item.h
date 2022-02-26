@@ -18,7 +18,7 @@
         int getBonusValue() const;
     protected:
     private:
-        Type classification{  };
+        Type classification{ Type::sword };
         int bonusValue{  };
     };
 

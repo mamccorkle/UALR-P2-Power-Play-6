@@ -22,7 +22,7 @@ Monster::Monster( const Object& player ): Object()
         case Object::Type::slime:
             strengthVariance  = level  * 1.5;
             healthVariance  = level  * 1.25;
-            ACVariance = level / 2;
+            ACVariance = level / 2.0;
             break;
         case Object::Type::orc:
             strengthVariance  = level  * 2.0;
@@ -37,7 +37,7 @@ Monster::Monster( const Object& player ): Object()
         case Object::Type::dragon:
             strengthVariance  = level  * 6.0;
             healthVariance  = (long long)level  * level  * 3.0;
-            ACVariance = level * 3;
+            ACVariance = (double)level * 3.0;
             break;
     }
     std::normal_distribution<double> randomStrength(strengthVariance, level  / 4.0);

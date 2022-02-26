@@ -50,6 +50,7 @@ int main()
 
     while( !player.isDead() )
     {
+        player.levelUp();
         monsters  = createMonsters(player);
 
         std::cout  << monsters.size() << " monster(s) approaches!!" << std::endl;
