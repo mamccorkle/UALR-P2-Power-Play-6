@@ -5,9 +5,7 @@
 #include "Item.h"
 
 Item::Item( Type classification, int bonusValue ): classification( classification ), bonusValue( bonusValue )
-{
-
-}
+{ }
 
 void Item::print( ) const
 {
@@ -21,6 +19,8 @@ void Item::print( ) const
             break;
         case Item::Type::sword:
             std::cout << "Sword";
+            break;
+        case Type::numTypes:
             break;
     }
     std::cout << "+" << bonusValue;
@@ -48,6 +48,8 @@ std::ostream &operator<<( std::ostream& COUT, const Item& item )
             break;
         case Item::Type::sword:
             COUT << "Sword";
+            break;
+        case Item::Type::numTypes:
             break;
     }
     COUT << "+" << item.bonusValue;

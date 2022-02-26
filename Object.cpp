@@ -36,6 +36,8 @@ void Object::printName( ) const
         case Object::Type::dragon:
             std::cout << "Dragon";
             break;
+        case Type::numTypes:
+            break;
     }
 }
 
@@ -63,6 +65,8 @@ std::ostream &operator<<( std::ostream& COUT, const Object& object )
             break;
         case Object::Type::dragon:
             COUT << "Dragon";
+            break;
+        case Object::Type::numTypes:
             break;
     }
     return COUT;

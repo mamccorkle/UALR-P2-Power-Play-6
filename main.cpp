@@ -24,16 +24,14 @@
             b)  << for the Item class (same as printItem function)                          -   Complete
             c)  < for the Item class (compares bonus values)                                -   Complete
             d)  += for the Item class (adds bonus values and an int and returns an int)     -   Complete
+
 */
 #include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
-//#include "Item.h"
 #include "Monster.h"
 #include "Player.h"
-
-// TODO: Clean header file names (ifndef)
 
 std::vector<Monster> createMonsters(const Player& player);
 void bringOutYourDead(std::vector<Monster>& monsters);
@@ -57,7 +55,7 @@ int main()
         system("pause");
         system("cls");
 
-        while( !player.isDead() > 0 && monsters.size() > 0 )
+        while( !player.isDead() > 0 && (int)monsters.size() > 0 )
         {
 
             displayBattle(player, monsters);
@@ -93,11 +91,11 @@ int main()
     {
         std::cout << "You Have Died" << std::endl;
     }
-    if( player.isDead() && monsters.size() == 0 )
+    if( player.isDead() && (int)monsters.size() == 0 )
     {
         std::cout << "BUT" << std::endl;
     }
-    if( monsters.size() == 0 )
+    if( (int)monsters.size() == 0 )
     {
         std::cout << "You have killed the monsters!!!" << std::endl;
     }

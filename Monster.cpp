@@ -3,7 +3,7 @@
 //
 #include <iostream>     // Header files should be dependency-inclusive
 #include "Monster.h"
-#include "Player.h"
+//#include "Player.h"
 
 Monster::Monster( const Object& player ): Object()
 {
@@ -38,6 +38,10 @@ Monster::Monster( const Object& player ): Object()
             strengthVariance = level * 6.0;
             healthVariance = (long long)level * level * 3.0;
             ACVariance = (double)level * 3.0;
+            break;
+        case Type::player:
+            break;
+        case Type::numTypes:
             break;
     }
     std::normal_distribution<double> randomStrength(strengthVariance, level / 4.0);

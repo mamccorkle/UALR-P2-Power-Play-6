@@ -11,15 +11,18 @@
     class Player: public Object
     {
     public:
-        Player();
+        // Constructors:
+        Player();     // Default
+
+        // Member Functions:
         void levelUp();
         void heal();
-
         int attack( ) const;
         void defend( int );
         void battlePrint() const;
 
     protected:
+
     private:
         std::map<Item::Type, Item> inventory{ };
         int SP{ };

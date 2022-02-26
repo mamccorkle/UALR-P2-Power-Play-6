@@ -10,16 +10,20 @@
     class Monster: public Object
     {
     public:
-        Monster() = default;
-        Monster( const Object& );   // Conversion Constructor
+        // Constructors:
+        Monster() = default;        // Default
+        Monster( const Object& );   // Conversion
 
+        // Member Functions:
         int attack( ) const;
         void defend( int );
         void battlePrint() const;
 
     protected:
+
     private:
         int AC{ };
+
     };
 
 #endif //UALR___P2___POWER_PLAY_6_MONSTER_H

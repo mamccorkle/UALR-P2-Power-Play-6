@@ -13,6 +13,7 @@
         Item() = default;
         Item( Type, int );    // Conversion Constructor
 
+        // Member Functions:
         void print() const; // Will need to change to use the operator overload
         Item::Type getClassification() const;
         int getBonusValue() const;
