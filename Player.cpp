@@ -18,6 +18,7 @@ void Player::levelUp()
 
     std::normal_distribution<double> randomStrength(3.0 + level, 1.0);
     strength  += std::max(1, (int)randomStrength(engine));
+    SP += std::max( 1, static_cast<int>( randomStrength(engine) ) );
 
     //grab new item.
     std::uniform_int_distribution<int> randomItem(0, (int)Item::Type::numTypes  - 1);
@@ -30,7 +31,7 @@ void Player::levelUp()
     if (
         auto haveOne{ inventory.find(found.getClassification()) };
             haveOne  == inventory.end()
-            || inventory[found.getClassification()].getBonusValue()  < found.getBonusValue()
+            || inventory[found.getClassification()].getBonusValue() < found.getBonusValue()
             )
     {
         std::cout  << "You keep the shiny new toy!" << std::endl;
@@ -44,11 +45,19 @@ void Player::levelUp()
 
 void Player::heal()
 {
-    std::normal_distribution<double> randomHeal(strength, 3.0);
-    int  amountHealed{ std::max(1, (int)randomHeal(Object::engine)) };
-    printName();
-    std::cout  << " is healed by " << amountHealed  << "hp!" << std::endl;
-    health  += amountHealed;
+    if( SP >= 2 )
+    {
+        std::normal_distribution<double> randomHeal(strength, 3.0);
+        int amountHealed{std::max(1, (int) randomHeal(Object::engine))};
+        printName();
+        std::cout << " is healed by " << amountHealed << "hp!" << std::endl;
+        health += amountHealed;
+        SP -= 2;
+    }
+    else
+    {
+        std::cout << "Not enough SP!!!" << std::endl;
+    }
 }
 
 int Player::attack( ) const
@@ -63,7 +72,6 @@ int Player::attack( ) const
     printName();
     std::cout  << " deals ";
     return std::max(1, (int)damageDealt(Object::engine));
-}
 }
 
 void Player::defend( int damage )
@@ -86,15 +94,11 @@ void Player::defend( int damage )
     health -= damage;
 }
 
-bool Player::isDead() const
-{
-    return health <= 0;
-}
-
 void Player::battlePrint() const
 {
     printName();
     std::cout  << " h:" << health  << std::endl;
+    std::cout << " SP: " << SP << std::endl;
     std::for_each(inventory.begin(), inventory.end(), [](std::pair<Item::Type, Item> item)
     {
         std::cout  << "  ";

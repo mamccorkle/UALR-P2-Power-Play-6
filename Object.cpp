@@ -4,8 +4,8 @@
 #include <iostream>     // Header files should be dependency-inclusive
 #include "Object.h"
 
-static std::random_device seed;
-static std::default_random_engine engine(seed());
+std::random_device Object::seed;
+std::default_random_engine Object::engine(seed());
 
 // Object Conversion Constructor Definition:
 Object::Object( Object::Type name, int strength, int health, int level )
@@ -37,4 +37,9 @@ void Object::printName(  ) const
             std::cout  << "Dragon";
             break;
     }
+}
+
+bool Object::isDead() const
+{
+    return health <= 0;
 }

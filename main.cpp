@@ -124,10 +124,10 @@ std::vector<Monster> createMonsters(const Player& player)
 {
     std::normal_distribution<double> randomNumMonsters((double)player.getLevel(), player.getLevel()  / 2.0);
     std::vector<Monster> monsters(std::max(1, (int)randomNumMonsters(Object::engine)));
-    std::generate(monsters.begin(), monsters.end(), [&]()
+    std::generate(monsters.begin(), monsters.end(), [=]()
     {
         // Call the Monster class default constructor:
-        return Monster();
+        return Monster(player);
     });
     return monsters;
 }
@@ -146,9 +146,8 @@ void playerAttack(const Player& player, std::vector<Monster>& monsters)
     std::cout  << "Which Monster: ";
     int monsterNum{ 0 };
     std::cin  >> monsterNum;
-    if (monsterNum  > 0 && monsterNum  <= monsters.size())
+    if (monsterNum  > 0 && monsterNum  <= (int)monsters.size())
     {
-        //defend(monsters[monsterNum  - 1], attack(player));
         monsters[monsterNum  - 1].defend(player.attack());
     }
 }
@@ -157,7 +156,7 @@ void bringOutYourDead(std::vector<Monster>& monsters)
 {
     monsters.erase(
     std::remove_if(monsters.begin(), monsters.end(),
-                   [](Monster& monster)
+                   [](const Monster& monster)
                    {
                        if( monster.isDead() )
                        {

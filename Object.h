@@ -21,6 +21,7 @@
         // Class Member Functions:
         int getLevel() const;
         void printName() const; // Will need to change to use the operator overload
+        bool isDead() const;
 
     protected:
         Type name{ Type::player };

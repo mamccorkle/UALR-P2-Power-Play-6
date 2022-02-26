@@ -10,6 +10,7 @@
         enum class Type { sword, armor, shield, numTypes };
 
         // Constructors:
+        Item() = default;
         Item( Type, int );    // Conversion Constructor
 
         void print() const; // Will need to change to use the operator overload

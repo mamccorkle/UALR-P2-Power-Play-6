@@ -17,7 +17,6 @@
 
         int attack( ) const;
         void defend( int );
-        bool isDead() const;
         void battlePrint() const;
 
     protected:

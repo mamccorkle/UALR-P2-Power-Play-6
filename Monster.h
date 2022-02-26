@@ -16,7 +16,6 @@
         int attack( ) const;
         void defend( int );
         void battlePrint() const;
-        bool isDead() const;
 
     protected:
     private:
