@@ -19,7 +19,7 @@
 
     protected:
     private:
-        int AC{  };
+        int AC{ };
     };
 
 #endif //UALR___P2___POWER_PLAY_6_MONSTER_H

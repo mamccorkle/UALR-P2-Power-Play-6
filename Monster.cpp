@@ -7,10 +7,10 @@
 
 Monster::Monster( const Object& player ): Object()
 {
-    std::normal_distribution<double> monsterLevel((float)player.getLevel(), player.getLevel()  / 4.0);
+    std::normal_distribution<double> monsterLevel((float)player.getLevel(), player.getLevel() / 4.0);
     level = std::max(1, (int)monsterLevel(engine));
 
-    std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes  - 1);
+    std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes - 1);
     name = (Object::Type)monsterType(engine);
 
     double strengthVariance{ 0.0 };
@@ -20,28 +20,28 @@ Monster::Monster( const Object& player ): Object()
     switch (name)
     {
         case Object::Type::slime:
-            strengthVariance  = level  * 1.5;
-            healthVariance  = level  * 1.25;
+            strengthVariance = level * 1.5;
+            healthVariance = level * 1.25;
             ACVariance = level / 2.0;
             break;
         case Object::Type::orc:
-            strengthVariance  = level  * 2.0;
-            healthVariance  = (long long)level  * level  * 1.25;
+            strengthVariance = level * 2.0;
+            healthVariance = (long long)level * level * 1.25;
             ACVariance = level * 1.5;
             break;
         case Object::Type::sprite:
-            strengthVariance  = level  * 1.75;
-            healthVariance  = level;
+            strengthVariance = level * 1.75;
+            healthVariance = level;
             ACVariance = 0;
             break;
         case Object::Type::dragon:
-            strengthVariance  = level  * 6.0;
-            healthVariance  = (long long)level  * level  * 3.0;
+            strengthVariance = level * 6.0;
+            healthVariance = (long long)level * level * 3.0;
             ACVariance = (double)level * 3.0;
             break;
     }
-    std::normal_distribution<double> randomStrength(strengthVariance, level  / 4.0);
-    std::normal_distribution<double> randomHealth(healthVariance  * 5, level  / 2.0);
+    std::normal_distribution<double> randomStrength(strengthVariance, level / 4.0);
+    std::normal_distribution<double> randomHealth(healthVariance * 5, level / 2.0);
 
     if( ACVariance != 0 )
     {
@@ -60,7 +60,7 @@ int Monster::attack( ) const
     if (willAttack(engine))
     {
         printName();
-        std::cout  << " attacks!" << std::endl;
+        std::cout << " attacks!" << std::endl;
         int potentialDamage{ strength };
         std::normal_distribution<double> damageDealt( potentialDamage, 2.0 );
         return std::max( 1, static_cast<int>( damageDealt( engine )) );
@@ -68,7 +68,7 @@ int Monster::attack( ) const
     else
     {
         printName();
-        std::cout  << " twiddles its thumbs" << std::endl;
+        std::cout << " twiddles its thumbs" << std::endl;
         return 0;
     }
 }
@@ -76,15 +76,15 @@ int Monster::attack( ) const
 void Monster::defend( int damage )
 {
     std::normal_distribution<double> defense(AC, 1.0 / level);
-    damage  = std::max(0, damage  - (int)defense(engine));
-    std::cout  << damage  << " damage to ";
+    damage = std::max(0, damage - (int)defense(engine));
+    std::cout << damage << " damage to ";
     printName();
-    std::cout  << "!!!" << std::endl;
-    health  -= damage;
+    std::cout << "!!!" << std::endl;
+    health -= damage;
 }
 
 void Monster::battlePrint() const
 {
     printName();
-    std::cout  << " h:" << health  << std::endl;
+    std::cout << " h:" << health << std::endl;
 }

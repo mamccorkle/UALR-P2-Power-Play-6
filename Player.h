@@ -21,8 +21,8 @@
 
     protected:
     private:
-        std::map<Item::Type, Item> inventory{  };
-        int SP{  };
+        std::map<Item::Type, Item> inventory{ };
+        int SP{ };
     };
 
 #endif //UALR___P2___POWER_PLAY_6_PLAYER_H

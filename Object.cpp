@@ -16,25 +16,25 @@ int Object::getLevel() const
     return level;
 }
 
-void Object::printName(  ) const
+void Object::printName( ) const
 {
     std::cout << "L:" << level << " ";
     switch (name)
     {
         case Object::Type::player:
-            std::cout  << "Player";
+            std::cout << "Player";
             break;
         case Object::Type::slime:
-            std::cout  << "Slime";
+            std::cout << "Slime";
             break;
         case Object::Type::orc:
-            std::cout  << "Orc";
+            std::cout << "Orc";
             break;
         case Object::Type::sprite:
-            std::cout  << "Sprite";
+            std::cout << "Sprite";
             break;
         case Object::Type::dragon:
-            std::cout  << "Dragon";
+            std::cout << "Dragon";
             break;
     }
 }
@@ -43,3 +43,28 @@ bool Object::isDead() const
 {
     return health <= 0;
 }
+
+std::ostream &operator<<( std::ostream& COUT, const Object& object )
+{
+    COUT << "L:" << object.level << " ";
+    switch (object.name)
+    {
+        case Object::Type::player:
+            COUT << "Player";
+            break;
+        case Object::Type::slime:
+            COUT << "Slime";
+            break;
+        case Object::Type::orc:
+            COUT << "Orc";
+            break;
+        case Object::Type::sprite:
+            COUT << "Sprite";
+            break;
+        case Object::Type::dragon:
+            COUT << "Dragon";
+            break;
+    }
+    return COUT;
+}
+

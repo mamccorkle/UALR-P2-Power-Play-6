@@ -29,6 +29,10 @@
         int health{ 0 };
         int level{ 0 };
 
+        // Insertion operator overloading using Friend declaration to access private members from outside the class:
+        // Source: https://www.learncpp.com/cpp-tutorial/overloading-the-io-operators/
+        friend std::ostream& operator<<( std::ostream& COUT, const Object& object );
+
     private:
 
     };
