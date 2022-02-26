@@ -7,7 +7,7 @@
 //  IDE: CLion 2021.2.3     - VERIFIED WORKING
 //  IDE: XCode              - VERIFIED/UNVERIFIED
 //  IDE: Visual Studio 2022 - VERIFIED/UNVERIFIED
-//  IDE: Linux via g++      - VERIFIED WORKING (g++ -Wall -std=c++17 main.cpp -o main)
+//  IDE: Linux via g++      - VERIFIED WORKING (g++ -std=c++17 -Wall main.cpp Item.cpp Monster.cpp Object.cpp Player.cpp -o main)
 //
 /*  OBJECTIVES:
 
@@ -28,9 +28,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-//#include <random>
 #include <algorithm>
-#include "Item.h"
+//#include "Item.h"
 #include "Monster.h"
 #include "Player.h"
 
